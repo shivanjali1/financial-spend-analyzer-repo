@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class CustomerDTO {
 
-	private Long id;
+
 	private String name;
 	private LocalDate dob;
 	private String gender;
@@ -15,6 +15,6 @@ public class CustomerDTO {
 	private String email;
 	private String address;
 	private double accountBalance;
-	private String customerId;
+
 	
 }

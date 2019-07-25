@@ -25,34 +25,48 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 	@Override
 	public ResponseDTO registerUser(CustomerDTO customer) {
 		// TODO Auto-generated method stub
-		String checkForCustomerExistOrNot = registerUserRepository.findByIdEmail(customer.getEmail());
-
-		Customer customerDetails = new Customer();
-		customerDetails.setName(customer.getName());
-		customerDetails.setGender(customer.getGender());
-		customerDetails.setDob(customer.getDob());
-		customerDetails.setPan(customer.getPan());
-		customerDetails.setEmail(customer.getEmail());
-		customerDetails.setPhone(customer.getPhone());
-		customerDetails.setAddress(customer.getAddress());
-		
-		String generatedCustomerId =  customer.getName().substring(0,3) + customer.getPhone().substring(0,3) + System.currentTimeMillis()/3600;
-		
-		customerDetails.setCustomerId(generatedCustomerId);
-		registerUserRepository.save(customerDetails);
-		
-			
-		customer.setCustomerId(generatedCustomerId);
-		
 		
 		ResponseDTO responseDTOOject = new ResponseDTO();
-		responseDTOOject.setMessage("Success");
-		responseDTOOject.setData(customer);
-		responseDTOOject.setHttpStatus(HttpStatus.OK);
+		Customer customerDetailss = new Customer();
+		
+		String checkForCustomerExistOrNot = registerUserRepository.findByEmail(customer.getEmail());
+		if(null == checkForCustomerExistOrNot){
+			
+			Customer customerDetails = new Customer();
+			customerDetails.setName(customer.getName());
+			customerDetails.setGender(customer.getGender());
+			customerDetails.setDob(customer.getDob());
+			customerDetails.setPan(customer.getPan());
+			customerDetails.setEmail(customer.getEmail());
+			customerDetails.setPhone(customer.getPhone());
+			customerDetails.setAddress(customer.getAddress());
+			
+			String generatedCustomerId =  customer.getName().substring(0,3) + customer.getPhone().substring(0,3) + System.currentTimeMillis()/3600;
+			
+			customerDetails.setCustomerId(generatedCustomerId);
+			registerUserRepository.save(customerDetails);
+			
+				
+
+			
+			
+			
+			responseDTOOject.setMessage("Success");
+			responseDTOOject.setData(customer);
+			responseDTOOject.setHttpStatus(HttpStatus.OK);
+									
+			return responseDTOOject;
+			
+		}
 		
 		
-		
+		responseDTOOject.setMessage("Failed");
+		responseDTOOject.setData(customerDetailss);
+		responseDTOOject.setHttpStatus(HttpStatus.BAD_REQUEST);
+								
 		return responseDTOOject;
+		
+		
 	}
 	
 	
