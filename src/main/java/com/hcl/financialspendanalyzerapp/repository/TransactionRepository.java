@@ -12,5 +12,9 @@ import com.hcl.financialspendanalyzerapp.entity.Transaction;
 public interface TransactionRepository extends JpaRepository<Transaction, Long>{
 	
 	@Query(value="select * from transaction where customer_id = :customerId and status='completed'", nativeQuery= true)
-	public List<Transaction> findTransactionDetails(String customerId); 
+	public List<Transaction> findTransactionDetails(String customerId);
+	
+	public Transaction findByTransactionIdAndStatusIgnoreCase(Long transactionId, String status);
+	
+	
 }

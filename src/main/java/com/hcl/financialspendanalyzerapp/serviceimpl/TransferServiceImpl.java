@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.hcl.financialspendanalyzerapp.controller.TransferController;
+import com.hcl.financialspendanalyzerapp.dto.OtpDTO;
 import com.hcl.financialspendanalyzerapp.dto.PaymentDTO;
 import com.hcl.financialspendanalyzerapp.dto.PaymentResponseDTO;
 import com.hcl.financialspendanalyzerapp.dto.ResponseDTO;
@@ -81,6 +83,59 @@ public class TransferServiceImpl implements TransferService {
 
 		return responseDTO;
 
+	}
+
+	@Override
+	public ResponseDTO validateTransaction(OtpDTO otpDTO) throws ApplicationException {
+	
+		ResponseDTO responseDTO = new ResponseDTO();
+		
+		boolean validate = oTPService.validate(otpDTO.getCustomerId(), otpDTO.getTransactionId(), otpDTO.getOtpCode());
+		if(BooleanUtils.isTrue(validate)) {
+			Transaction completedTransaction = transactionRepository.findByTransactionIdAndStatusIgnoreCase(otpDTO.getTransactionId() , "pending");
+			if(null == completedTransaction) {
+				throw new ApplicationException("No transaction found");
+			}
+			Customer customerDetails = completedTransaction.getCustomerDetails();
+			
+			if("debit".equalsIgnoreCase(completedTransaction.getPaymentType())){
+				if(customerDetails.getAccountBalance() < completedTransaction.getAmount()) {
+					throw new ApplicationException("Insufficent balance");
+				}else {
+					customerDetails.setAccountBalance(customerDetails.getAccountBalance() - completedTransaction.getAmount());
+					completedTransaction.setCurrentBalance(customerDetails.getAccountBalance() - completedTransaction.getAmount());
+				}
+			}else if("credit".equalsIgnoreCase(completedTransaction.getPaymentType())){
+				customerDetails.setAccountBalance(customerDetails.getAccountBalance() + completedTransaction.getAmount());
+				completedTransaction.setCurrentBalance(customerDetails.getAccountBalance() + completedTransaction.getAmount());
+			}
+			
+			completedTransaction.setStatus("completed");
+			Transaction savedTransaction = transactionRepository.save(completedTransaction);
+			customerRepository.save(customerDetails);
+			
+			PaymentResponseDTO paymentResponseDTO = new PaymentResponseDTO();
+			paymentResponseDTO.setCustomerId(otpDTO.getCustomerId());
+			paymentResponseDTO.setDate(savedTransaction.getDate());
+			paymentResponseDTO.setPaymentType(savedTransaction.getPaymentType());
+			paymentResponseDTO.setStatus(savedTransaction.getStatus());
+			paymentResponseDTO.setTransactionAmount(savedTransaction.getAmount());
+			paymentResponseDTO.setTransactionId(savedTransaction.getTransactionId());
+			paymentResponseDTO.setTransDescription(savedTransaction.getTransDescription());
+			
+			
+			responseDTO.setMessage("Payment transaction completed sucessfully.");
+			responseDTO.setHttpStatus(HttpStatus.OK);
+			responseDTO.setData(paymentResponseDTO);
+			logger.debug("Payment transaction id : " + savedTransaction.getTransactionId());
+			logger.info("Payment transaction intitiated");
+			logger.info("" + responseDTO);
+			
+		}else {
+			throw new ApplicationException("Invalid input data");
+		}
+		
+		return responseDTO;
 	}
 
 }
