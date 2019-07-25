@@ -45,7 +45,7 @@ public class Transaction implements Serializable {
 	
 	@ManyToOne
 	@JoinColumn(name = "id")
-	private Customer customerId;
+	private Customer customerDetails;
 	
 	@Column(name = "current_balance")
 	private Double currentBalance;
