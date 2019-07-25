@@ -1,7 +1,7 @@
 package com.hcl.financialspendanalyzerapp.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +35,7 @@ public class Customer implements Serializable {
 	private  String name;
 	
 	@Column(name = "dob")
-	private LocalDateTime dob;
+	private LocalDate dob;
 	
 	@Column(name = "gender")
 	private String gender;
