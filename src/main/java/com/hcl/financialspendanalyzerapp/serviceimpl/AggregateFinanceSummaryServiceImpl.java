@@ -19,7 +19,7 @@ public class AggregateFinanceSummaryServiceImpl implements AggregateFinanceSumma
 	public List<MonthlyAggregateSummaryDTO> getMonthlyAggregateSummary(String customerId) {
 
 		List<MonthlyAggregateSummaryDTO> monthlyAggregateSummary = null;
-		monthlyAggregateSummary = aggregateFinanceSummaryRepository.getMonthlyAggregateSummary(customerId);
+		//monthlyAggregateSummary = aggregateFinanceSummaryRepository.getMonthlyAggregateSummary(customerId);
 		return monthlyAggregateSummary;
 	}
 
