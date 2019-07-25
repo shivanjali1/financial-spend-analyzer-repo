@@ -8,14 +8,14 @@ import org.springframework.stereotype.Service;
 import com.hcl.financialspendanalyzerapp.dto.CustomerDTO;
 import com.hcl.financialspendanalyzerapp.dto.ResponseDTO;
 import com.hcl.financialspendanalyzerapp.entity.Customer;
-import com.hcl.financialspendanalyzerapp.repository.RegisterUserRepository;
+import com.hcl.financialspendanalyzerapp.repository.CustomerRepository;
 import com.hcl.financialspendanalyzerapp.service.RegisterUserService;
 
 @Service
 public class RegisterUserServiceImpl implements RegisterUserService {
 
 	@Autowired
-	RegisterUserRepository registerUserRepository;
+	CustomerRepository customerRepository;
 	
 	/**
 	 * @requestBody take user details from controller as DTO for 
@@ -29,7 +29,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 		ResponseDTO responseDTOOject = new ResponseDTO();
 		Customer customerDetailss = new Customer();
 		
-		String checkForCustomerExistOrNot = registerUserRepository.findByEmail(customer.getEmail());
+		String checkForCustomerExistOrNot = customerRepository.findByEmail(customer.getEmail());
 		if(null == checkForCustomerExistOrNot){
 			
 			Customer customerDetails = new Customer();
@@ -44,7 +44,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 			String generatedCustomerId =  customer.getName().substring(0,3) + customer.getPhone().substring(0,3) + System.currentTimeMillis()/3600;
 			
 			customerDetails.setCustomerId(generatedCustomerId);
-			registerUserRepository.save(customerDetails);
+			customerRepository.save(customerDetails);
 			
 				
 
