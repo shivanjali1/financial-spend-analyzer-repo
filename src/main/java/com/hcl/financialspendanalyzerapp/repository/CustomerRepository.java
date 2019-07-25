@@ -1,5 +1,5 @@
 package com.hcl.financialspendanalyzerapp.repository;
 
-public class CustomerRepository {
+public interface CustomerRepository {
 
 }
