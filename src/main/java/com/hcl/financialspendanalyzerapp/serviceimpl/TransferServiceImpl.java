@@ -8,7 +8,6 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.hcl.financialspendanalyzerapp.controller.TransferController;
@@ -51,7 +50,6 @@ public class TransferServiceImpl implements TransferService{
 			savedCustomer = findByCustomerId.get();
 		}
 		
-		//savedCustomer.getAccountBalance() - paymentDTO.getAmount();
 		transaction.setCurrentBalance(savedCustomer.getAccountBalance() - paymentDTO.getAmount());
 		transaction.setCustomerId(savedCustomer);
 		transaction.setDate(LocalDateTime.now());
@@ -59,11 +57,7 @@ public class TransferServiceImpl implements TransferService{
 		transaction.setStatus("pending");
 		transaction.setTransDescription(paymentDTO.getPaymentType());
 		Transaction savedTransaction = transactionRepository.save(transaction);
-		
-		oTPService.generateOTP(paymentDTO.getCustomerId(), savedTransaction.getTransactionId());
-		responseDTO.setMessage("Payment transaction intitiated sucessfully.");
-		responseDTO.setHttpStatus(HttpStatus.OK);
-		responseDTO.setData(savedTransaction);
+	//	OTPService.
 		logger.debug("Payment transaction id : "+savedTransaction.getTransactionId());
 		logger.info("Payment transaction intitiated");
 		return responseDTO;

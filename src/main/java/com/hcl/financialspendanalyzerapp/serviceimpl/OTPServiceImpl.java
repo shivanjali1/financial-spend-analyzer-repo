@@ -10,16 +10,22 @@ import com.hcl.financialspendanalyzerapp.entity.OtpDetails;
 import com.hcl.financialspendanalyzerapp.exception.ApplicationException;
 import com.hcl.financialspendanalyzerapp.repository.OTPRepository;
 import com.hcl.financialspendanalyzerapp.service.OTPService;
-import com.hcl.financialspendanalyzerapp.util.EmailUtil;
 
 @Service
 public class OTPServiceImpl implements OTPService {
 
 	private final static int otpLength = 6; 
 	private final static int expireTime=5;
+	private final static String sub = "OTP for transaction";
+	private final static String bodyInit = " Dear Custemer, Your OTP for the transaction is ";
+	private final static String bodyFinal = "";
 
 	@Autowired
 	OTPRepository oTPRepository;
+	
+	@Autowired
+	EmailServiceImpl emailServiceImpl;
+
 	
 	@Override
 	public OtpDetails generateOTP(String custId, Long tranId) {
@@ -31,7 +37,9 @@ public class OTPServiceImpl implements OTPService {
 		otp.setTime(LocalDateTime.now());
 		otp.setTransactionId(tranId);
 		oTPRepository.save(otp);
-		EmailUtil.sendEmail();
+		emailServiceImpl.sendSimpleMessage(sub,bodyInit+otp.getOtpCode());
+		
+		System.out.println(oTPRepository.getOtpDetailsByTransIdAndCustId("1", 1l).getOtpCode());
 		return otp;
 	}
 
