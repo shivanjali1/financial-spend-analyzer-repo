@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ResponseDTO  {
 
-	private String errorMessage;
+	private String message;
 	private HttpStatus httpStatus;
 	private Object data;
 

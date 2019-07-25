@@ -42,7 +42,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 		Customer savedCustomer = registerUserRepository.save(customerDetails);
 		
 		ResponseDTO responseDTOOject = new ResponseDTO();
-		responseDTOOject.setErrorMessage(" Welcome to ING Bank.\n There’s the DONE thing and then there’s the ING way. \n\n Your customer id is -->"+savedCustomer.getCustomerId());
+		responseDTOOject.setMessage(" Welcome to ING Bank.\n There’s the DONE thing and then there’s the ING way. \n\n Your customer id is -->"+savedCustomer.getCustomerId());
 		responseDTOOject.setData(savedCustomer);
 		responseDTOOject.setHttpStatus(HttpStatus.OK);
 		

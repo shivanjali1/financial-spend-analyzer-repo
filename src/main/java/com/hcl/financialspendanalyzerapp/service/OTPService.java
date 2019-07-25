@@ -5,6 +5,6 @@ import com.hcl.financialspendanalyzerapp.entity.OtpDetails;
 public interface OTPService {
 	
 	OtpDetails generateOTP(String custId,Long tranId);
-	boolean validate(OtpDetails otp);
+	boolean validate(String custId, Long tranId);
 
 }
