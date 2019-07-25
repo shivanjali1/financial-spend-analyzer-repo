@@ -38,8 +38,6 @@ public class OTPServiceImpl implements OTPService {
 		otp.setTransactionId(tranId);
 		oTPRepository.save(otp);
 		emailServiceImpl.sendSimpleMessage(sub,bodyInit+otp.getOtpCode());
-		
-		System.out.println(oTPRepository.getOtpDetailsByTransIdAndCustId("1", 1l).getOtpCode());
 		return otp;
 	}
 
