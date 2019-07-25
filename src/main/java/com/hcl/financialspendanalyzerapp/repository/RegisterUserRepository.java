@@ -6,4 +6,6 @@ import com.hcl.financialspendanalyzerapp.entity.Customer;
 
 public interface RegisterUserRepository extends JpaRepository<Customer, Long>{
 
+	String findByIdEmail(String email);
+
 }

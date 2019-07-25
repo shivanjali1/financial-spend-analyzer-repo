@@ -1,5 +1,6 @@
 package com.hcl.financialspendanalyzerapp.serviceimpl;
 
+import org.apache.catalina.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -24,9 +25,8 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 	@Override
 	public ResponseDTO registerUser(CustomerDTO customer) {
 		// TODO Auto-generated method stub
-		
-		
-		
+		String checkForCustomerExistOrNot = registerUserRepository.findByIdEmail(customer.getEmail());
+
 		Customer customerDetails = new Customer();
 		customerDetails.setName(customer.getName());
 		customerDetails.setGender(customer.getGender());
@@ -38,13 +38,19 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 		
 		String generatedCustomerId =  customer.getName().substring(0,3) + customer.getPhone().substring(0,3) + System.currentTimeMillis()/3600;
 		
-		customerDetails.setCustomerId(generatedCustomerId);;
-		Customer savedCustomer = registerUserRepository.save(customerDetails);
+		customerDetails.setCustomerId(generatedCustomerId);
+		registerUserRepository.save(customerDetails);
+		
+			
+		customer.setCustomerId(generatedCustomerId);
+		
 		
 		ResponseDTO responseDTOOject = new ResponseDTO();
-		responseDTOOject.setMessage(" Welcome to ING Bank.\n There’s the DONE thing and then there’s the ING way. \n\n Your customer id is -->"+savedCustomer.getCustomerId());
-		responseDTOOject.setData(savedCustomer);
+		responseDTOOject.setMessage("Success");
+		responseDTOOject.setData(customer);
 		responseDTOOject.setHttpStatus(HttpStatus.OK);
+		
+		
 		
 		return responseDTOOject;
 	}
