@@ -1,11 +1,6 @@
 package com.hcl.financialspendanalyzerapp.dto;
 
-import java.time.LocalDateTime;
-
-import javax.persistence.Column;
-
-import com.hcl.financialspendanalyzerapp.entity.Customer;
-
+import java.time.LocalDate;
 import lombok.Data;
 
 @Data
@@ -13,7 +8,7 @@ public class CustomerDTO {
 
 	private Long id;
 	private String name;
-	private LocalDateTime dob;
+	private LocalDate dob;
 	private String gender;
 	private String pan;
 	private String phone;

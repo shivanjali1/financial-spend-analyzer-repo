@@ -1,12 +1,11 @@
 package com.hcl.financialspendanalyzerapp.serviceimpl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import com.hcl.financialspendanalyzerapp.dto.CustomerDTO;
+import com.hcl.financialspendanalyzerapp.dto.ResponseDTO;
 import com.hcl.financialspendanalyzerapp.entity.Customer;
 import com.hcl.financialspendanalyzerapp.repository.RegisterUserRepository;
 import com.hcl.financialspendanalyzerapp.service.RegisterUserService;
@@ -23,7 +22,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 	 * @return the generated Customer id
 	 */
 	@Override
-	public String registerUser(CustomerDTO customer) {
+	public ResponseDTO registerUser(CustomerDTO customer) {
 		// TODO Auto-generated method stub
 		
 		
@@ -35,12 +34,19 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 		customerDetails.setPan(customer.getPan());
 		customerDetails.setEmail(customer.getEmail());
 		customerDetails.setPhone(customer.getPhone());
+		customerDetails.setAddress(customer.getAddress());
 		
-		String generatedCustomerId = "" + System.currentTimeMillis();
+		String generatedCustomerId =  customer.getName().substring(0,3) + customer.getPhone().substring(0,3) + System.currentTimeMillis()/3600;
 		
-		//registerUserRepository.save(customerDetails);
+		customerDetails.setCustomerId(generatedCustomerId);;
+		Customer savedCustomer = registerUserRepository.save(customerDetails);
 		
-		return generatedCustomerId;
+		ResponseDTO responseDTOOject = new ResponseDTO();
+		responseDTOOject.setErrorMessage(" Welcome to ING Bank.\n There’s the DONE thing and then there’s the ING way. \n\n Your customer id is -->"+savedCustomer.getCustomerId());
+		responseDTOOject.setData(savedCustomer);
+		responseDTOOject.setHttpStatus(HttpStatus.OK);
+		
+		return responseDTOOject;
 	}
 	
 	
