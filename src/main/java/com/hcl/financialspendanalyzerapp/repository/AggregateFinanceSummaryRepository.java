@@ -11,5 +11,5 @@ import com.hcl.financialspendanalyzerapp.entity.Transaction;
 @Repository
 public interface AggregateFinanceSummaryRepository extends JpaRepository<Transaction, Long> {
 
-	public List<MonthlyAggregateSummaryDTO> getMonthlyAggregateSummary(String customerId);
+	//public List<MonthlyAggregateSummaryDTO> getMonthlyAggregateSummary(String customerId);
 }
