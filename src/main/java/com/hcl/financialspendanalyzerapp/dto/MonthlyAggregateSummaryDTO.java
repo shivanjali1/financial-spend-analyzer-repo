@@ -1,19 +1,17 @@
 package com.hcl.financialspendanalyzerapp.dto;
 
-import java.time.LocalDate;
-
 import lombok.Data;
 
 @Data
 public class MonthlyAggregateSummaryDTO {
 
-	private LocalDate month;
+	private String month;
 	
 	private String customerId;
 	
-	private Double totalIncoming;
+	private String totalIncoming;
 	
-	private Double totalOutgoing;
+	private String totalOutgoing;
 	
-	private Double closingBalance;
+	private String closingBalance;
 }

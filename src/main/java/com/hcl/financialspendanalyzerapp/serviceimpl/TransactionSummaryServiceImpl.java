@@ -7,6 +7,8 @@ import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +21,8 @@ import com.hcl.financialspendanalyzerapp.repository.CustomerRepository;
 import com.hcl.financialspendanalyzerapp.repository.TransactionRepository;
 import com.hcl.financialspendanalyzerapp.service.TransactionSummaryService;
 import com.hcl.financialspendanalyzerapp.util.TransactionMapper;
+
+import org.springframework.data.domain.Sort; 
 
 @Service
 public class TransactionSummaryServiceImpl implements TransactionSummaryService {
@@ -41,7 +45,8 @@ public class TransactionSummaryServiceImpl implements TransactionSummaryService 
 		
 	
 			if (optopnalCustomer.isPresent()) {
-			List<Transaction> transactions = transactionRepository.findTransactionDetails(customerId);
+				Pageable page=PageRequest.of(0, 2, Sort.by("date").descending());
+			List<Transaction> transactions = transactionRepository.findTransactionDetails(customerId,page);
 			 
 			 List<TransactionDTO> respList = new ArrayList<>();
 			 transactions.forEach(u -> {
