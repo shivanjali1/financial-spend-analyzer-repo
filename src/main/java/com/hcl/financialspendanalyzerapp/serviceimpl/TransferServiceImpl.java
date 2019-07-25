@@ -52,7 +52,6 @@ public class TransferServiceImpl implements TransferService{
 			throw new ApplicationException("Invalid Customer id.");
 		}
 		
-<<<<<<< HEAD
 		transaction.setCurrentBalance(savedCustomer.getAccountBalance() - paymentDTO.getAmount());
 		transaction.setCustomerId(savedCustomer);
 		transaction.setDate(LocalDateTime.now());
@@ -63,7 +62,6 @@ public class TransferServiceImpl implements TransferService{
 	//	OTPService.
 		logger.debug("Payment transaction id : "+savedTransaction.getTransactionId());
 		logger.info("Payment transaction intitiated");
-=======
 		try {
 			transaction.setCurrentBalance(savedCustomer.getAccountBalance());
 			transaction.setCustomerId(savedCustomer);
@@ -84,7 +82,6 @@ public class TransferServiceImpl implements TransferService{
 		}catch(Exception e) {
 			System.out.println(e);
 		}
->>>>>>> a335d6c2a5bff45e9f1d63d1aa1facd2ca396c50
 		return responseDTO;
 		
 		
