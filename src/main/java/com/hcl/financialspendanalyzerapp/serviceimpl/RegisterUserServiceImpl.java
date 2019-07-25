@@ -1,6 +1,8 @@
 package com.hcl.financialspendanalyzerapp.serviceimpl;
 
-import org.apache.catalina.User;
+import java.time.LocalDate;
+import java.time.Period;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,8 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 	public ResponseDTO registerUser(CustomerDTO customer) {
 		// TODO Auto-generated method stub
 		
+		//int age =  Period.between(customer.getUserDOB(), LocalDate.now()).getYears();
+		
 		ResponseDTO responseDTOOject = new ResponseDTO();
 		Customer customerDetailss = new Customer();
 		
@@ -46,7 +50,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 			customerDetails.setCustomerId(generatedCustomerId);
 			customerRepository.save(customerDetails);
 			
-				
+			customer.setCustomerId(generatedCustomerId);
 
 			
 			
