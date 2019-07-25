@@ -1,5 +1,6 @@
 package com.hcl.financialspendanalyzerapp.serviceimpl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -10,11 +11,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.hcl.financialspendanalyzerapp.dto.ResponseDTO;
+import com.hcl.financialspendanalyzerapp.dto.TransactionDTO;
 import com.hcl.financialspendanalyzerapp.entity.Customer;
 import com.hcl.financialspendanalyzerapp.entity.Transaction;
 import com.hcl.financialspendanalyzerapp.exception.CustomerNotFoundException;
 import com.hcl.financialspendanalyzerapp.repository.CustomerRepository;
+import com.hcl.financialspendanalyzerapp.repository.TransactionRepository;
 import com.hcl.financialspendanalyzerapp.service.TransactionSummaryService;
+import com.hcl.financialspendanalyzerapp.util.TransactionMapper;
 
 @Service
 public class TransactionSummaryServiceImpl implements TransactionSummaryService {
@@ -27,21 +31,33 @@ public class TransactionSummaryServiceImpl implements TransactionSummaryService 
 	@Autowired
 	private CustomerRepository customerRepository;
 	
+	@Autowired
+	private TransactionRepository transactionRepository;
+	
 	public ResponseDTO getSummaryDetails(String customerId) throws CustomerNotFoundException{
 		
 		logger.info("Inside Service method");
-		Optional<Customer> customer = customerRepository.findByCustomerId(customerId);
-			if (customer.isPresent()) {
-				List<Transaction> transactions= customer.get().getTransactionList();
-				ResponseDTO response = new ResponseDTO();
-				response.setHttpStatus(HttpStatus.OK);
-				response.setMessage("Current Transactions");
-				response.setData(transactions);
-				return response;
-				
-			}
-			throw new CustomerNotFoundException("Account of customer is not present..");
+		Optional<Customer> optopnalCustomer = customerRepository.findByCustomerId(customerId);
+		
+	
+			if (optopnalCustomer.isPresent()) {
+			List<Transaction> transactions = transactionRepository.findTransactionDetails(customerId);
+			 
+			 List<TransactionDTO> respList = new ArrayList<>();
+			 transactions.forEach(u -> {
+					respList.add(TransactionMapper.mapTransactionDTOToResponseList(u));
+
+				});
+			ResponseDTO response = new ResponseDTO();
+			response.setHttpStatus(HttpStatus.OK);
+			response.setMessage("Transactions summary");
+			response.setData(respList);
+			return response;
 		}
+			else {
+				throw new CustomerNotFoundException("Invalid customer id");
+			}
 	}
+}
 
 

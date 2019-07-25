@@ -59,5 +59,5 @@ public class Customer implements Serializable {
 	private Double accountBalance = 0.0;
 	
 	@OneToMany(mappedBy= "customerDetails", cascade = CascadeType.ALL)
-	private List<Transaction> transactionList = new ArrayList();
+	private List<Transaction> transactionList;
 }

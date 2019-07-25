@@ -26,9 +26,9 @@ public class OTPServiceImplTests {
 	OTPServiceImpl oTPService ;
 	@Test
 	public void testGenerateOTP() {
-		OtpDetails otp = oTPService.generateOTP("", 1l);
+		OtpDetails otp = oTPService.generateOTP("", 1l, "");
 		System.out.println("OTP ::::::::::::::::::: " + otp.getOtpCode());
-		OtpDetails otp1 = oTPService.generateOTP("", 1l);
+		OtpDetails otp1 = oTPService.generateOTP("", 1l, "");
 		System.out.println("OTP ::::::::::::::::::: " + otp1.getOtpCode());
 		
 		assertNotNull(otp);

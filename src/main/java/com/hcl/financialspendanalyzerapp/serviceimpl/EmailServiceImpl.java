@@ -11,10 +11,10 @@ public class EmailServiceImpl {
 	@Autowired
     private JavaMailSender javaMailSender;
 	
-	public void sendSimpleMessage(String subject,String body) {
+	public void sendSimpleMessage(String subject,String body, String emailId) {
 		
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-		simpleMailMessage.setTo("kanaseshivanjali@gmail.com");
+		simpleMailMessage.setTo(emailId);
 		simpleMailMessage.setSubject(subject);
 		simpleMailMessage.setText(body);
 		javaMailSender.send(simpleMailMessage);
