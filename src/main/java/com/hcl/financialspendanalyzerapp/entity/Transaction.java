@@ -44,7 +44,7 @@ public class Transaction implements Serializable {
 	private String status;
 	
 	@ManyToOne
-	@JoinColumn(name = "id")
+	@JoinColumn(name = "customer_id")
 	private Customer customerId;
 	
 	@Column(name = "current_balance")
