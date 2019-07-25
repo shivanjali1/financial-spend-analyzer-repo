@@ -5,7 +5,7 @@ import java.time.LocalDate;
 import lombok.Data;
 
 @Data
-public class MonthlyAggregateSummary {
+public class MonthlyAggregateSummaryDTO {
 
 	private LocalDate month;
 	
