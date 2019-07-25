@@ -32,7 +32,7 @@ public class OtpDetails implements Serializable {
 	private LocalDateTime time;
 	
 	@Column(name = "otp")
-	private String otp;
+	private String otpCode;
 	
 	@Column(name = "transaction_id")
 	private Long transactionId;
