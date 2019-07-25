@@ -71,7 +71,7 @@ public class TransferServiceImpl implements TransferService {
 		paymentResponseDTO.setTransactionId(savedTransaction.getTransactionId());
 		paymentResponseDTO.setTransDescription(savedTransaction.getTransDescription());
 
-		oTPService.generateOTP(paymentDTO.getCustomerId(), savedTransaction.getTransactionId());
+		oTPService.generateOTP(paymentDTO.getCustomerId(), savedTransaction.getTransactionId(), savedCustomer.getEmail() );
 		responseDTO.setMessage("Payment transaction intitiated sucessfully.");
 		responseDTO.setHttpStatus(HttpStatus.OK);
 		responseDTO.setData(paymentResponseDTO);

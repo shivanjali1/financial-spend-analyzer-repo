@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.hcl.financialspendanalyzerapp.dto.PaymentDTO;
@@ -30,7 +31,7 @@ public class TransferController {
 	@Autowired
 	TransferService transferService;
 	
-	@PostMapping("")
+	@PostMapping("/initiate")
 	public ResponseEntity<Object> initiateTransaction(@RequestBody PaymentDTO paymentDTO) throws ApplicationException{
 		logger.info("Received Payment Request.");
 		
@@ -39,6 +40,13 @@ public class TransferController {
 		
 		ResponseDTO initiatTransactionResponse = transferService.initiatTransaction(paymentDTO);
 		return new ResponseEntity<>(initiatTransactionResponse , HttpStatus.OK);
+	}
+	
+	@PostMapping("/complete")
+	public ResponseEntity<Object> validateTransaction(@RequestParam Long transactionID, @RequestParam String otp) throws ApplicationException{
+		
+		
+		return null;
 	}
 	
 	private void validatePaymentRequest(PaymentDTO paymentDTO) throws ApplicationException{

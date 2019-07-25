@@ -28,7 +28,7 @@ public class OTPServiceImpl implements OTPService {
 
 	
 	@Override
-	public OtpDetails generateOTP(String custId, Long tranId) {
+	public OtpDetails generateOTP(String custId, Long tranId, String emailId) {
 		// TODO Auto-generated method stub
 		String otpCode = getRanOTP(otpLength);
 		OtpDetails otp = new OtpDetails();
@@ -37,7 +37,7 @@ public class OTPServiceImpl implements OTPService {
 		otp.setTime(LocalDateTime.now());
 		otp.setTransactionId(tranId);
 		oTPRepository.save(otp);
-		emailServiceImpl.sendSimpleMessage(sub,bodyInit+otp.getOtpCode());
+		emailServiceImpl.sendSimpleMessage(sub,bodyInit+otp.getOtpCode(), emailId);
 		return otp;
 	}
 

@@ -7,5 +7,6 @@ import com.hcl.financialspendanalyzerapp.exception.ApplicationException;
 public interface TransferService {
 	
 	public ResponseDTO initiatTransaction(PaymentDTO paymentDTO) throws ApplicationException;
-
+	
+//	public ResponseDTO validateTransaction(PaymentDTO paymentDTO) throws ApplicationException;
 }
