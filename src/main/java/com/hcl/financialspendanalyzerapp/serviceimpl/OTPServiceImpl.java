@@ -30,6 +30,10 @@ public class OTPServiceImpl implements OTPService {
 	@Override
 	public OtpDetails generateOTP(String custId, Long tranId, String emailId) {
 		// TODO Auto-generated method stub
+		OtpDetails otpDetails = oTPRepository.getOtpDetailsByTransIdAndCustId(custId, tranId);
+		if(otpDetails != null) {
+			oTPRepository.delete(otpDetails);
+		}
 		String otpCode = getRanOTP(otpLength);
 		OtpDetails otp = new OtpDetails();
 		otp.setCustomerId(custId);
@@ -47,7 +51,9 @@ public class OTPServiceImpl implements OTPService {
 		OtpDetails otp = oTPRepository.getOtpDetailsByTransIdAndCustId(custId, tranId);
 		if(otp != null) {
 			if(otp.getOtpCode().equals(otpToValidate)) {
+				oTPRepository.delete(otp);
 				return true;
+				
 			}
 		}
 		
