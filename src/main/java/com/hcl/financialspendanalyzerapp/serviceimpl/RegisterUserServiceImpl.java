@@ -26,6 +26,8 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 	public String registerUser(CustomerDTO customer) {
 		// TODO Auto-generated method stub
 		
+		
+		
 		Customer customerDetails = new Customer();
 		customerDetails.setName(customer.getName());
 		customerDetails.setGender(customer.getGender());
@@ -34,7 +36,11 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 		customerDetails.setEmail(customer.getEmail());
 		customerDetails.setPhone(customer.getPhone());
 		
-		return "";
+		String generatedCustomerId = "" + System.currentTimeMillis();
+		
+		//registerUserRepository.save(customerDetails);
+		
+		return generatedCustomerId;
 	}
 	
 	
