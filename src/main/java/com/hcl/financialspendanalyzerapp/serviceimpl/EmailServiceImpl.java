@@ -11,12 +11,12 @@ public class EmailServiceImpl {
 	@Autowired
     private JavaMailSender javaMailSender;
 	
-	public void sendSimpleMessage() {
+	public void sendSimpleMessage(String subject,String body) {
 		
 		SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
 		simpleMailMessage.setTo("kanaseshivanjali@gmail.com");
-		simpleMailMessage.setSubject("spring boot simple mail msg");
-		simpleMailMessage.setText("This is for testing .............\n spring boot simple mail msg");
+		simpleMailMessage.setSubject(subject);
+		simpleMailMessage.setText(body);
 		javaMailSender.send(simpleMailMessage);
 	}
 	

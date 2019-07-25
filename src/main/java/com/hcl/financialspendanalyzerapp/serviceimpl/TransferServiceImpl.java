@@ -8,11 +8,11 @@ import javax.transaction.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import com.hcl.financialspendanalyzerapp.controller.TransferController;
 import com.hcl.financialspendanalyzerapp.dto.PaymentDTO;
+import com.hcl.financialspendanalyzerapp.dto.PaymentResponseDTO;
 import com.hcl.financialspendanalyzerapp.dto.ResponseDTO;
 import com.hcl.financialspendanalyzerapp.entity.Customer;
 import com.hcl.financialspendanalyzerapp.entity.Transaction;
@@ -46,12 +46,13 @@ public class TransferServiceImpl implements TransferService{
 		transaction.setAmount(paymentDTO.getAmount());
 		Optional<Customer> findByCustomerId = customerRepository.findByCustomerId(paymentDTO.getCustomerId());
 		
-		Customer savedCustomer = null;
+		Customer savedCustomer;
 		if(findByCustomerId.isPresent()) {
 			savedCustomer = findByCustomerId.get();
+		}else {
+			throw new ApplicationException("Invalid Customer id.");
 		}
 		
-		//savedCustomer.getAccountBalance() - paymentDTO.getAmount();
 		transaction.setCurrentBalance(savedCustomer.getAccountBalance() - paymentDTO.getAmount());
 		transaction.setCustomerId(savedCustomer);
 		transaction.setDate(LocalDateTime.now());
@@ -59,14 +60,41 @@ public class TransferServiceImpl implements TransferService{
 		transaction.setStatus("pending");
 		transaction.setTransDescription(paymentDTO.getPaymentType());
 		Transaction savedTransaction = transactionRepository.save(transaction);
-		
-		oTPService.generateOTP(paymentDTO.getCustomerId(), savedTransaction.getTransactionId());
-		responseDTO.setMessage("Payment transaction intitiated sucessfully.");
-		responseDTO.setHttpStatus(HttpStatus.OK);
-		responseDTO.setData(savedTransaction);
+	//	OTPService.
 		logger.debug("Payment transaction id : "+savedTransaction.getTransactionId());
 		logger.info("Payment transaction intitiated");
+		try {
+			transaction.setCurrentBalance(savedCustomer.getAccountBalance());
+			transaction.setCustomerDetails(savedCustomer);
+			transaction.setDate(LocalDateTime.now());
+			transaction.setPaymentType(paymentDTO.getPaymentType());
+			transaction.setStatus("pending");
+			transaction.setTransDescription(paymentDTO.getPaymentType());
+			Transaction savedTransaction = transactionRepository.save(transaction);
+			
+			PaymentResponseDTO paymentResponseDTO = new PaymentResponseDTO();
+			paymentResponseDTO.setCustomerId(paymentDTO.getCustomerId());
+			paymentResponseDTO.setDate(savedTransaction.getDate());
+			paymentResponseDTO.setPaymentType(savedTransaction.getPaymentType());
+			paymentResponseDTO.setStatus(savedTransaction.getStatus());
+			paymentResponseDTO.setTransactionAmount(savedTransaction.getAmount());
+			paymentResponseDTO.setTransactionId(savedTransaction.getTransactionId());
+			paymentResponseDTO.setTransDescription(savedTransaction.getTransDescription());
+			
+			//oTPService.generateOTP(paymentDTO.getCustomerId(), savedTransaction.getTransactionId());
+			responseDTO.setMessage("Payment transaction intitiated sucessfully.");
+			responseDTO.setHttpStatus(HttpStatus.OK);
+			responseDTO.setData(paymentResponseDTO);
+			logger.debug("Payment transaction id : "+savedTransaction.getTransactionId());
+			logger.info("Payment transaction intitiated");
+			logger.info(""+responseDTO);
+			return responseDTO;
+		}catch(Exception e) {
+			System.out.println(e);
+		}
 		return responseDTO;
+		
+		
 		
 	}
 
