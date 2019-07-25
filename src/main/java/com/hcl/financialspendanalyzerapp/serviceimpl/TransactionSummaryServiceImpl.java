@@ -45,8 +45,8 @@ public class TransactionSummaryServiceImpl implements TransactionSummaryService 
 		
 	
 			if (optopnalCustomer.isPresent()) {
-				//Pageable page=PageRequest.of(0, 2, Sort.by("date").descending());
-			List<Transaction> transactions = transactionRepository.findTransactionDetails(customerId);
+				Pageable page=PageRequest.of(0, 2, Sort.by("date").descending());
+			List<Transaction> transactions = transactionRepository.findTransactionDetails(customerId,page);
 			 
 			 List<TransactionDTO> respList = new ArrayList<>();
 			 transactions.forEach(u -> {
