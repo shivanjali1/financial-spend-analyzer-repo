@@ -18,7 +18,7 @@ import lombok.Data;
 
 @Data
 @Entity
-@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "transaction_Id")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "transactionId")
 public class Transaction implements Serializable {
 
 	private static final long serialVersionUID = 8150969107241434435L;
@@ -44,7 +44,7 @@ public class Transaction implements Serializable {
 	private String status;
 	
 	@ManyToOne
-	@JoinColumn(name = "customer_id")
+	@JoinColumn(name = "id")
 	private Customer customerId;
 	
 	@Column(name = "current_balance")
