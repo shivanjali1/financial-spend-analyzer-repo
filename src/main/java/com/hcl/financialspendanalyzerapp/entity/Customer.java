@@ -56,7 +56,7 @@ public class Customer implements Serializable {
 	private String customerId;
 	
 	@Column(name = "account_balance")
-	private Double accountBalance;
+	private Double accountBalance = 0.0;
 	
 	@OneToMany(mappedBy= "customerId", cascade = CascadeType.ALL)
 	private List<Transaction> transactionList = new ArrayList();
