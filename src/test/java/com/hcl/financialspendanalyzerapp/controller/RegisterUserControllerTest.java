@@ -55,20 +55,12 @@ public class RegisterUserControllerTest {
 		responseDTO.setMessage("Success");
 		responseDTO.setData(customerForTest);
 
+		//registerUserController.validateRequest(customerForTest);
 		Mockito.when(registerUserServiceImpl.registerUser(customerForTest)).thenReturn(responseDTO);
 		assertNotNull(registerUserController.registerUser(customerForTest));
 	}
 
-	@Test(expected = ApplicationException.class)
-	public void registerUserFailedTest() throws ApplicationException {
 
-		responseDTO.setHttpStatus(HttpStatus.BAD_REQUEST);
-		responseDTO.setMessage("Failed");
-		responseDTO.setData(customerForTest);
-
-		Mockito.when(registerUserServiceImpl.registerUser(customerForTest)).thenReturn(responseDTO);
-	}
-	
 	@Test
 	public void registerUserWithUserNameEmptyTest() throws ApplicationException {
 
