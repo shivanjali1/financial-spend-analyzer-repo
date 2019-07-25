@@ -1,7 +1,7 @@
 package com.hcl.financialspendanalyzerapp.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,7 +38,7 @@ public class Transaction implements Serializable {
 	private String paymentType;
 	
 	@Column(name = "date")
-	private LocalDateTime date;
+	private LocalDate date;
 	
 	@Column(name = "status")
 	private String status;
