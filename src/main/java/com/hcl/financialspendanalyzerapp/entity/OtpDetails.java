@@ -17,7 +17,7 @@ import lombok.Data;
 @Data
 @Entity
 @JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "opt_id")
-public class Otp implements Serializable {
+public class OtpDetails implements Serializable {
 	
 	private static final long serialVersionUID = -8985679445647579333L;
 	
@@ -31,8 +31,8 @@ public class Otp implements Serializable {
 	@Column(name = "time")
 	private LocalDateTime time;
 	
-	@Column(name = "oTP")
-	private String oTP;
+	@Column(name = "otp")
+	private String otp;
 	
 	@Column(name = "transaction_id")
 	private Long transactionId;
