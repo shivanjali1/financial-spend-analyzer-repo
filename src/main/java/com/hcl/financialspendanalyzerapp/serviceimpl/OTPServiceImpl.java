@@ -4,12 +4,15 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.hcl.financialspendanalyzerapp.entity.OtpDetails;
+import com.hcl.financialspendanalyzerapp.exception.ApplicationException;
 import com.hcl.financialspendanalyzerapp.repository.OTPRepository;
 import com.hcl.financialspendanalyzerapp.service.OTPService;
 import com.hcl.financialspendanalyzerapp.util.EmailUtil;
 
+@Service
 public class OTPServiceImpl implements OTPService {
 
 	private final static int otpLength = 6; 
@@ -33,8 +36,15 @@ public class OTPServiceImpl implements OTPService {
 	}
 
 	@Override
-	public boolean validate(String custId, Long tranId) {
+	public boolean validate(String custId, Long tranId,String otpToValidate) throws ApplicationException {
 		// TODO Auto-generated method stub
+		OtpDetails otp = oTPRepository.getOtpDetailsByTransIdAndCustId(custId, tranId);
+		if(otp != null) {
+			if(otp.getOtpCode().equals(otpToValidate)) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 

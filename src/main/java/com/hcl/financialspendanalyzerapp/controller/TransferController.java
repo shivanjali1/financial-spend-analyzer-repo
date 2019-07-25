@@ -7,6 +7,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,7 +28,7 @@ public class TransferController {
 	@Autowired
 	TransferService transferService;
 	
-	@RequestMapping("")
+	@PostMapping("")
 	public ResponseEntity<Object> initiateTransaction(@RequestBody PaymentDTO paymentDTO) throws ApplicationException{
 		logger.info("Received Payment Request.");
 		
