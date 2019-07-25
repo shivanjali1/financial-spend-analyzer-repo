@@ -15,6 +15,7 @@ public class CustomerDTO {
 	private String email;
 	private String address;
 	private double accountBalance;
+	private String customerId;
 
 	
 }

@@ -22,6 +22,9 @@ public class OTPServiceImplTests {
 	@Mock
 	OTPRepository oTPRepository;
 	
+	@Mock 
+	EmailServiceImpl emailServiceImpl;
+	
 	@InjectMocks
 	OTPServiceImpl oTPService ;
 	@Test
