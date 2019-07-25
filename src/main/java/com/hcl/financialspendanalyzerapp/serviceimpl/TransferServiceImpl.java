@@ -45,11 +45,14 @@ public class TransferServiceImpl implements TransferService{
 		transaction.setAmount(paymentDTO.getAmount());
 		Optional<Customer> findByCustomerId = customerRepository.findByCustomerId(paymentDTO.getCustomerId());
 		
-		Customer savedCustomer = null;
+		Customer savedCustomer;
 		if(findByCustomerId.isPresent()) {
 			savedCustomer = findByCustomerId.get();
+		}else {
+			throw new ApplicationException("Invalid Customer id.");
 		}
 		
+<<<<<<< HEAD
 		transaction.setCurrentBalance(savedCustomer.getAccountBalance() - paymentDTO.getAmount());
 		transaction.setCustomerId(savedCustomer);
 		transaction.setDate(LocalDateTime.now());
@@ -60,7 +63,31 @@ public class TransferServiceImpl implements TransferService{
 	//	OTPService.
 		logger.debug("Payment transaction id : "+savedTransaction.getTransactionId());
 		logger.info("Payment transaction intitiated");
+=======
+		try {
+			transaction.setCurrentBalance(savedCustomer.getAccountBalance());
+			transaction.setCustomerId(savedCustomer);
+			transaction.setDate(LocalDateTime.now());
+			transaction.setPaymentType(paymentDTO.getPaymentType());
+			transaction.setStatus("pending");
+			transaction.setTransDescription(paymentDTO.getPaymentType());
+			Transaction savedTransaction = transactionRepository.save(transaction);
+			
+			//oTPService.generateOTP(paymentDTO.getCustomerId(), savedTransaction.getTransactionId());
+			responseDTO.setMessage("Payment transaction intitiated sucessfully.");
+			responseDTO.setHttpStatus(HttpStatus.OK);
+			responseDTO.setData(savedTransaction);
+			logger.debug("Payment transaction id : "+savedTransaction.getTransactionId());
+			logger.info("Payment transaction intitiated");
+			logger.info(""+responseDTO);
+			return responseDTO;
+		}catch(Exception e) {
+			System.out.println(e);
+		}
+>>>>>>> a335d6c2a5bff45e9f1d63d1aa1facd2ca396c50
 		return responseDTO;
+		
+		
 		
 	}
 
