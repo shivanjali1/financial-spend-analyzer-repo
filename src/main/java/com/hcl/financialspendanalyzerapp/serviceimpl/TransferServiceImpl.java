@@ -24,16 +24,16 @@ import com.hcl.financialspendanalyzerapp.service.OTPService;
 import com.hcl.financialspendanalyzerapp.service.TransferService;
 
 @Service
-public class TransferServiceImpl implements TransferService{
-	
+public class TransferServiceImpl implements TransferService {
+
 	private static final Logger logger = LoggerFactory.getLogger(TransferController.class);
-	
+
 	@Autowired
 	CustomerRepository customerRepository;
-	
+
 	@Autowired
 	TransactionRepository transactionRepository;
-	
+
 	@Autowired
 	OTPService oTPService;
 
@@ -42,61 +42,45 @@ public class TransferServiceImpl implements TransferService{
 	public ResponseDTO initiatTransaction(PaymentDTO paymentDTO) throws ApplicationException {
 		logger.info("Payment transaction intitiated");
 		ResponseDTO responseDTO = new ResponseDTO();
-		
+
 		Transaction transaction = new Transaction();
 		transaction.setAmount(paymentDTO.getAmount());
 		Optional<Customer> findByCustomerId = customerRepository.findByCustomerId(paymentDTO.getCustomerId());
-		
+
 		Customer savedCustomer;
-		if(findByCustomerId.isPresent()) {
+		if (findByCustomerId.isPresent()) {
 			savedCustomer = findByCustomerId.get();
-		}else {
+		} else {
 			throw new ApplicationException("Invalid Customer id.");
 		}
-		
-		transaction.setCurrentBalance(savedCustomer.getAccountBalance() - paymentDTO.getAmount());
-		transaction.setCustomerId(savedCustomer);
+		transaction.setAmount(paymentDTO.getAmount());
+		transaction.setCurrentBalance(savedCustomer.getAccountBalance());
+		transaction.setCustomerDetails(savedCustomer);
 		transaction.setDate(LocalDateTime.now());
 		transaction.setPaymentType(paymentDTO.getPaymentType());
 		transaction.setStatus("pending");
 		transaction.setTransDescription(paymentDTO.getPaymentType());
 		Transaction savedTransaction = transactionRepository.save(transaction);
-	//	OTPService.
-		logger.debug("Payment transaction id : "+savedTransaction.getTransactionId());
+
+		PaymentResponseDTO paymentResponseDTO = new PaymentResponseDTO();
+		paymentResponseDTO.setCustomerId(paymentDTO.getCustomerId());
+		paymentResponseDTO.setDate(savedTransaction.getDate());
+		paymentResponseDTO.setPaymentType(savedTransaction.getPaymentType());
+		paymentResponseDTO.setStatus(savedTransaction.getStatus());
+		paymentResponseDTO.setTransactionAmount(savedTransaction.getAmount());
+		paymentResponseDTO.setTransactionId(savedTransaction.getTransactionId());
+		paymentResponseDTO.setTransDescription(savedTransaction.getTransDescription());
+
+		oTPService.generateOTP(paymentDTO.getCustomerId(), savedTransaction.getTransactionId());
+		responseDTO.setMessage("Payment transaction intitiated sucessfully.");
+		responseDTO.setHttpStatus(HttpStatus.OK);
+		responseDTO.setData(paymentResponseDTO);
+		logger.debug("Payment transaction id : " + savedTransaction.getTransactionId());
 		logger.info("Payment transaction intitiated");
-		try {
-			transaction.setCurrentBalance(savedCustomer.getAccountBalance());
-			transaction.setCustomerDetails(savedCustomer);
-			transaction.setDate(LocalDateTime.now());
-			transaction.setPaymentType(paymentDTO.getPaymentType());
-			transaction.setStatus("pending");
-			transaction.setTransDescription(paymentDTO.getPaymentType());
-			Transaction savedTransaction = transactionRepository.save(transaction);
-			
-			PaymentResponseDTO paymentResponseDTO = new PaymentResponseDTO();
-			paymentResponseDTO.setCustomerId(paymentDTO.getCustomerId());
-			paymentResponseDTO.setDate(savedTransaction.getDate());
-			paymentResponseDTO.setPaymentType(savedTransaction.getPaymentType());
-			paymentResponseDTO.setStatus(savedTransaction.getStatus());
-			paymentResponseDTO.setTransactionAmount(savedTransaction.getAmount());
-			paymentResponseDTO.setTransactionId(savedTransaction.getTransactionId());
-			paymentResponseDTO.setTransDescription(savedTransaction.getTransDescription());
-			
-			//oTPService.generateOTP(paymentDTO.getCustomerId(), savedTransaction.getTransactionId());
-			responseDTO.setMessage("Payment transaction intitiated sucessfully.");
-			responseDTO.setHttpStatus(HttpStatus.OK);
-			responseDTO.setData(paymentResponseDTO);
-			logger.debug("Payment transaction id : "+savedTransaction.getTransactionId());
-			logger.info("Payment transaction intitiated");
-			logger.info(""+responseDTO);
-			return responseDTO;
-		}catch(Exception e) {
-			System.out.println(e);
-		}
+		logger.info("" + responseDTO);
+
 		return responseDTO;
-		
-		
-		
+
 	}
 
 }
