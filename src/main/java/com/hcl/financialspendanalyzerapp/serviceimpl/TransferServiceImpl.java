@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.hcl.financialspendanalyzerapp.controller.TransferController;
 import com.hcl.financialspendanalyzerapp.dto.PaymentDTO;
+import com.hcl.financialspendanalyzerapp.dto.PaymentResponseDTO;
 import com.hcl.financialspendanalyzerapp.dto.ResponseDTO;
 import com.hcl.financialspendanalyzerapp.entity.Customer;
 import com.hcl.financialspendanalyzerapp.entity.Transaction;
@@ -55,17 +56,26 @@ public class TransferServiceImpl implements TransferService{
 		
 		try {
 			transaction.setCurrentBalance(savedCustomer.getAccountBalance());
-			transaction.setCustomerId(savedCustomer);
+			transaction.setCustomerDetails(savedCustomer);
 			transaction.setDate(LocalDateTime.now());
 			transaction.setPaymentType(paymentDTO.getPaymentType());
 			transaction.setStatus("pending");
 			transaction.setTransDescription(paymentDTO.getPaymentType());
 			Transaction savedTransaction = transactionRepository.save(transaction);
 			
+			PaymentResponseDTO paymentResponseDTO = new PaymentResponseDTO();
+			paymentResponseDTO.setCustomerId(paymentDTO.getCustomerId());
+			paymentResponseDTO.setDate(savedTransaction.getDate());
+			paymentResponseDTO.setPaymentType(savedTransaction.getPaymentType());
+			paymentResponseDTO.setStatus(savedTransaction.getStatus());
+			paymentResponseDTO.setTransactionAmount(savedTransaction.getAmount());
+			paymentResponseDTO.setTransactionId(savedTransaction.getTransactionId());
+			paymentResponseDTO.setTransDescription(savedTransaction.getTransDescription());
+			
 			//oTPService.generateOTP(paymentDTO.getCustomerId(), savedTransaction.getTransactionId());
 			responseDTO.setMessage("Payment transaction intitiated sucessfully.");
 			responseDTO.setHttpStatus(HttpStatus.OK);
-			responseDTO.setData(savedTransaction);
+			responseDTO.setData(paymentResponseDTO);
 			logger.debug("Payment transaction id : "+savedTransaction.getTransactionId());
 			logger.info("Payment transaction intitiated");
 			logger.info(""+responseDTO);
