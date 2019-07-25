@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.hcl.financialspendanalyzerapp.entity.OtpDetails;
 import com.hcl.financialspendanalyzerapp.repository.OTPRepository;
 import com.hcl.financialspendanalyzerapp.service.OTPService;
+import com.hcl.financialspendanalyzerapp.util.EmailUtil;
 
 public class OTPServiceImpl implements OTPService {
 
@@ -27,11 +28,12 @@ public class OTPServiceImpl implements OTPService {
 		otp.setTime(LocalDateTime.now());
 		otp.setTransactionId(tranId);
 		oTPRepository.save(otp);
+		EmailUtil.sendEmail();
 		return otp;
 	}
 
 	@Override
-	public boolean validate(OtpDetails otp) {
+	public boolean validate(String custId, Long tranId) {
 		// TODO Auto-generated method stub
 		return false;
 	}

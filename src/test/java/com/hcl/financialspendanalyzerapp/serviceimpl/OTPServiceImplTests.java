@@ -12,6 +12,7 @@ import org.mockito.junit.MockitoJUnitRunner;
 import com.hcl.financialspendanalyzerapp.entity.OtpDetails;
 import com.hcl.financialspendanalyzerapp.repository.OTPRepository;
 import com.hcl.financialspendanalyzerapp.service.OTPService;
+import com.hcl.financialspendanalyzerapp.util.EmailUtil;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OTPServiceImplTests {
