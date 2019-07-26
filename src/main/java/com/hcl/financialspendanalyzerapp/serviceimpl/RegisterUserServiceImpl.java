@@ -55,7 +55,7 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 			
 			
 			
-			responseDTOOject.setMessage("Success");
+			responseDTOOject.setMessage("User registerd sucessfully");
 			responseDTOOject.setData(customer);
 			responseDTOOject.setHttpStatus(HttpStatus.OK);
 									
