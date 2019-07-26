@@ -26,7 +26,7 @@ public class TransactionSummaryController {
 	
 	
 	@GetMapping("/summary/{customerId}")
-	public ResponseEntity<Object> summary(@PathVariable String customerId) throws ApplicationException{
+	public ResponseEntity<ResponseDTO> summary(@PathVariable String customerId) throws ApplicationException{
 		
 		logger.info("Got customer id");
 		
@@ -37,7 +37,7 @@ public class TransactionSummaryController {
 			logger.debug("Customer Id received is "+ customerId);
 			ResponseDTO transactions= transactionSummaryServiceImpl.getSummaryDetails(customerId);
 			logger.debug("Summary details for the customer are " + transactions );
-			return new ResponseEntity<>(transactions,HttpStatus.OK);
+			return new ResponseEntity<ResponseDTO>(transactions,HttpStatus.OK);
 		}
 	}
 
