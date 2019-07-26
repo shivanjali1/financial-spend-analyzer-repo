@@ -11,8 +11,8 @@ import com.hcl.financialspendanalyzerapp.entity.Transaction;
 @Repository
 public interface AggregateFinanceSummaryRepository extends JpaRepository<Transaction, Long> {
 
-	@Query(value = "SELECT DATE_FORMAT(date, \"%m-%Y\") month,customer_id, SUM(COALESCE(CASE WHEN payment_type = 'credit' THEN amount END,0)) totalIncoming, SUM(COALESCE(CASE WHEN payment_type = 'debit' THEN amount END,0)) totalOutgoing\r\n" + 
-			"       FROM ingfinance.transaction where customer_id = :customerId GROUP BY DATE_FORMAT(date, \"%m-%Y\");",nativeQuery = true)
+	@Query(value = "SELECT DATE_FORMAT(date, \"%m-%Y\") month,id, SUM(COALESCE(CASE WHEN payment_type = 'credit' THEN amount END,0)) totalIncoming, SUM(COALESCE(CASE WHEN payment_type = 'debit' THEN amount END,0)) totalOutgoing\r\n" + 
+			"       FROM ingfinance.transaction where id = :customerId GROUP BY DATE_FORMAT(date, \"%m-%Y\");",nativeQuery = true)
 	public List<List<?>> getMonthlyAggregateSummary(String customerId);
 	
 }
