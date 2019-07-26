@@ -1,8 +1,5 @@
 package com.hcl.financialspendanalyzerapp.serviceimpl;
 
-import java.time.LocalDate;
-import java.time.Period;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -33,7 +30,9 @@ public class RegisterUserServiceImpl implements RegisterUserService {
 		ResponseDTO responseDTOOject = new ResponseDTO();
 		Customer customerDetailss = new Customer();
 		
-		String checkForCustomerExistOrNot = customerRepository.findByEmail(customer.getEmail());
+		Customer customer2 = customerRepository.findByEmail(customer.getEmail());
+		
+		String checkForCustomerExistOrNot = customer2.getCustomerId();
 		if(null == checkForCustomerExistOrNot){
 			
 			Customer customerDetails = new Customer();

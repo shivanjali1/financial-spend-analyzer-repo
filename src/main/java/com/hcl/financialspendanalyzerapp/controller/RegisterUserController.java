@@ -20,7 +20,7 @@ import com.hcl.financialspendanalyzerapp.serviceimpl.RegisterUserServiceImpl;
 
 @RestController
 @RequestMapping(value = "/register")
-@CrossOrigin
+@CrossOrigin(origins = "*" , allowedHeaders = "*")
 public class RegisterUserController {
 
 	private static final Logger logger = LoggerFactory.getLogger(RegisterUserController.class);
